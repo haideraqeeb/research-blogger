@@ -1,13 +1,17 @@
-from fastapi import FastAPI
+from flask import Flask, request
 from gpt_researcher import GPTResearcher
 import asyncio
 
-app = FastAPI()
+app = Flask(__name__)
 
 
-@app.get("/report/{report_type}")
-async def get_report(query: str, report_type: str) -> dict:
+@app.route("/report/<report_type>", methods=["GET"])
+async def get_report(report_type):
+    query = request.args.get('query')
     researcher = GPTResearcher(query, report_type)
     research_result = await researcher.conduct_research()
     report = await researcher.write_report()
-    return {"report": report}
+    return report
+
+if (__name__ == "__main__"):
+    app.run(debug=True)
