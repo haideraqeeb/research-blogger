@@ -1,1 +1,3 @@
 gpt-researcher
+python-dotenv
+flask[async]
